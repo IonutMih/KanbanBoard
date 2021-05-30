@@ -1,0 +1,95 @@
+﻿@model KanbanBoard.Models.EditIssueModel
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<h1>Edit Task @Model.currentIssue.ID</h1>
+<link rel="stylesheet" href="./styles/style.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+<br />
+
+<div class="row">
+    <div class="col-md-6">
+        <form asp-controller="Issue" asp-action="Edit" method="post">
+            <div class="form-group">
+                <label for="AssignedUser">Assigned User</label>
+                <select class="form-control" id="AssignedUser" name="AssignedUser">
+                    <option>@Model.currentIssue.AssignedUser.UserName</option>
+                    @foreach (var user in Model.Users)
+                    {
+                        <option>@user.UserName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Summary">Summary</label>
+                <input type="text" class="form-control" id="Summary" name="Summary" value="@Model.currentIssue.Summary">
+
+            </div>
+            <div class="form-group">
+                <label for="RequestedCloseDate">Creation Date</label>
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' class="form-control" id="StartDate" name="StartDate" value="@Model.currentIssue.StartDate">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="RequestedCloseDate">Due Date</label>
+                <div class='input-group date' id='datetimepicker2'>
+                    <input type='text' class="form-control" id="RequestedCloseDate" name="RequestedCloseDate" value="@Model.currentIssue.RequestedCloseDate">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="State">State</label>
+                <select class="form-control" id="State" name="State">
+                    <option>@Model.currentIssue.State.Name</option>
+                    @foreach (var states in Model.States)
+                    {
+                        <option>@states.Name</option>
+                    }
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="EstimatedEffort">Estimated Effort(h)</label>
+                <input type="text" class="form-control" id="EstimatedEffort" name="EstimatedEffort" value="@Model.currentIssue.EstimatedEffort">
+            </div>
+
+            <div class="form-group">
+                <label for="Project">Project</label>
+                <select class="form-control" id="Project" name="Project">
+                    <option>@Model.currentIssue.Project.ProjectName</option>
+                    @foreach (var project in Model.Projects)
+                    {
+                        <option>@project.ProjectName</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="Priority">Priority</label>
+                <select class="form-control" id="Priority" name="Priority">
+                    <option>@Model.currentIssue.Priority.Name</option>
+                    @foreach (var priority in Model.Priorities)
+                    {
+                        <option>@priority.Name</option>
+                    }
+                </select>
+            </div>
+            <button type="submit" class="btn btn-primary mb-2">Edit</button>
+        </form>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function () {
+        $('#datetimepicker1').datetimepicker();
+        $('#datetimepicker2').datetimepicker();
+    });
+</script>

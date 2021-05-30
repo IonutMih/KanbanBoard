@@ -1,0 +1,15 @@
+﻿@model KanbanBoard.Models.DataBase.Issue
+@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<ul class="list-group">
+    <li class="list-group-item">Issue: @Model.ID</li>
+    <li class="list-group-item">Assigned User: @Model.AssignedUser.UserName</li>
+    <li class="list-group-item">Summary: @Model.Summary</li>
+    <li class="list-group-item">Project: @Model.Project.ProjectName</li>
+    <li class="list-group-item">Project: @Model.Priority.Name</li>
+    <li class="list-group-item">Creation Date: @Model.StartDate</li>
+    <li class="list-group-item">Due Date: @Model.RequestedCloseDate</li>
+    <li class="list-group-item">Kanban Flag: @Model.State</li>
+    <li class="list-group-item">Estimated Effort: @Model.EstimatedEffort</li>
+</ul>
