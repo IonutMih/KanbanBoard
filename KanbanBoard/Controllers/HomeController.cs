@@ -50,7 +50,7 @@ namespace KanbanBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string username, string password)
         {
-
+            //TODO: LA UI CAUTA DIV CU CLASS ALERT https://www.youtube.com/watch?v=vRqz_zUiJTw 54:05
             var user = await _userManager.FindByNameAsync(username);
 
             if (user != null)
