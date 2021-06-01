@@ -113,6 +113,7 @@ namespace KanbanBoard.Controllers
                 currentIssue.Summary = issue.Summary;
                 currentIssue.CloseDate = issue.CloseDate;
                 currentIssue.EstimatedEffort = issue.EstimatedEffort;
+                currentIssue.StartDate = issue.StartDate;
                 currentIssue.RequestedCloseDate = issue.RequestedCloseDate;
                 currentIssue.Project = _context.Projects.FirstOrDefault(p => p.ProjectName == Project);
                 currentIssue.AssignedUser = _userManager.Users.FirstOrDefault(u => u.UserName == AssignedUser);

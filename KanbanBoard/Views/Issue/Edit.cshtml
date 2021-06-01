@@ -2,15 +2,37 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h1>Edit Task @Model.currentIssue.ID</h1>
-<link rel="stylesheet" href="./styles/style.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+@{
+    var creationDate = @Model.currentIssue.StartDate.Year + "-";
+    if (!(Model.currentIssue.StartDate.Month > 9))
+    {
+        creationDate += "0";
+    }
+    creationDate += @Model.currentIssue.StartDate.Month + "-";
+    if (!(Model.currentIssue.StartDate.Day > 9))
+    {
+        creationDate += "0";
+    }
+    creationDate += @Model.currentIssue.StartDate.Day;
+    var dueDate = @Model.currentIssue.RequestedCloseDate.Year + "-";
+    if (!(Model.currentIssue.RequestedCloseDate.Month > 9))
+    {
+        dueDate += "0";
+    }
+    dueDate += @Model.currentIssue.RequestedCloseDate.Month + "-";
+    if (!(Model.currentIssue.RequestedCloseDate.Day > 9))
+    {
+        dueDate += "0";
+    }
+    dueDate += @Model.currentIssue.RequestedCloseDate.Day;
+}
 
-<br />
 
 <div class="row">
+    <div class="col-md-3"></div>
     <div class="col-md-6">
+        <h1>Edit Task @Model.currentIssue.ID</h1>
+        <hr />
         <form asp-controller="Issue" asp-action="Edit" method="post">
             <div class="form-group">
                 <label for="AssignedUser">Assigned User</label>
@@ -28,23 +50,17 @@
 
             </div>
             <div class="form-group">
-                <label for="RequestedCloseDate">Creation Date</label>
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" id="StartDate" name="StartDate" value="@Model.currentIssue.StartDate">
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <label for="CreationDate">Creation Date</label>
+                <input type="date" name="StartDate" max="3000-12-31"
+                       min="1000-01-01" class="form-control" value="@creationDate">
             </div>
             <div class="form-group">
                 <label for="RequestedCloseDate">Due Date</label>
-                <div class='input-group date' id='datetimepicker2'>
-                    <input type='text' class="form-control" id="RequestedCloseDate" name="RequestedCloseDate" value="@Model.currentIssue.RequestedCloseDate">
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type="date" name="RequestedCloseDate" max="3000-12-31"
+                       min="1000-01-01" class="form-control" value="@dueDate">
             </div>
+
+
             <div class="form-group">
                 <label for="State">State</label>
                 <select class="form-control" id="State" name="State">
@@ -81,15 +97,11 @@
                     }
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Edit</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary btn-lg mt-2"><a class="ml-3 mr-3">Edit</a></button>
+            </div>
         </form>
+
     </div>
 </div>
 
-
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker();
-        $('#datetimepicker2').datetimepicker();
-    });
-</script>

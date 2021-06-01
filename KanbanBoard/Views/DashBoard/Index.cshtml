@@ -1,5 +1,47 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model KanbanBoard.Models.DashboardModel
 @{
+    ViewData["Title"] = "Dashboard";
 }
+
+
+<div class="row">
+    <div class="col-md-4 col-lg-3 col-xl-2 text-center">
+        <h4 class="mb-4">@ViewData["Title"]</h4>
+        <a class="btn btn-primary btn-lg mb-4" asp-controller="Issue" asp-action="Create">Create new issue</a>
+    </div>
+    <div class="col-md-8 col-lg-9 col-xl-10">
+        <button class="testez" data-toggle="collapse" data-target="#nume">
+            Open Backlog
+            <i class="fas fa-chevron-down"></i>
+        </button>
+        <div id="nume" class="collapse padding">
+            <div class="container-fluid padding">
+                <div class="row padding">
+
+                    @foreach (var issue in Model.issuesInBacklog)
+                    {
+                        <div class="card border-dark">
+                            <div class="card-header">
+                                <i class="fas fa-exclamation-circle"></i>
+                                <a>ID: @issue.ID</a>
+                                <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                            </div>
+                            <div class="card-body text-dark">
+                                @*<h5 class="card-title">Dark card title</h5>*@
+                                <div class="card-text"><small>@issue.Summary</small></div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="padding">
+            <div class="row padding">
+                <div class="col-md-4">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

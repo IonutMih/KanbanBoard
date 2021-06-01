@@ -78,6 +78,7 @@ body {
 
 .card {
     max-width: 16rem;
+    min-width:16rem;
     margin-right: 4px;
     margin-left: 4px;
     margin-bottom: 4px;

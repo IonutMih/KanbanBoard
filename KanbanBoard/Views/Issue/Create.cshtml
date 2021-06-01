@@ -2,9 +2,8 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<link rel="stylesheet" href="./styles/style.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+
 
 <h1>Create task</h1>
 <br />
@@ -27,12 +26,8 @@
             </div>
             <div class="form-group">
                 <label for="RequestedCloseDate">Due Date</label>
-                <div class='input-group date' id='datetimepicker1'>
-                    <input type='text' class="form-control" id="RequestedCloseDate" name="RequestedCloseDate" />
-                    <span class="input-group-addon">
-                        <span class="glyphicon glyphicon-calendar"></span>
-                    </span>
-                </div>
+                <input type="date" name="RequestedCloseDate" max="3000-12-31"
+                       min="1000-01-01" class="form-control">
             </div>
             <div class="form-group">
                 <label for="EstimatedEffort">Estimated Effort(h)</label>
@@ -61,11 +56,3 @@
         </form>
     </div>
 </div>
-
- 
-<script type="text/javascript">
-    $(function () {
-        $('#datetimepicker1').datetimepicker();
-
-    });
-</script>
