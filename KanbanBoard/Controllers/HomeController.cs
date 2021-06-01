@@ -44,60 +44,70 @@ namespace KanbanBoard.Controllers
 
         public IActionResult Login()
         {
-            return View();
+            return View(new ValidateLogin());
         }
 
         [HttpPost]
-        public async Task<IActionResult> Login(string username, string password)
+        public async Task<IActionResult> Login(string UserName, string Password)
         {
-            //TODO: LA UI CAUTA DIV CU CLASS ALERT https://www.youtube.com/watch?v=vRqz_zUiJTw 54:05
-            var user = await _userManager.FindByNameAsync(username);
+            ValidateLogin validateLogin = new ValidateLogin(_userManager);
+            validateLogin.GetListOfError(UserName, Password);
 
-            if (user != null)
+            if (validateLogin.errors.Count == 0)
             {
-                var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
+                var user = await _userManager.FindByNameAsync(UserName);
+                var signInResult = await _signInManager.PasswordSignInAsync(user, Password, false, false);
                 if (signInResult.Succeeded)
                 {
                     return RedirectToAction("Index");
                 }
             }
-
+            else
+            {
+                return View(validateLogin);
+            }
             return RedirectToAction("Index");
         }
 
         public IActionResult Register()
         {
-            return View();
+            return View(new ValidateRegister());
         }
 
-        [Authorize(Policy = "AdminAccess")]
-        public IActionResult Secret()
-        {
-            List<Priority> priorities = _context.Priorities.Where(p => p.ID > 0).ToList();
-            return View(priorities);
-        }
 
         [HttpPost]
-        public async Task<IActionResult> Register(string username, string password)
+        public async Task<IActionResult> Register(string UserName, string Password,
+                                                  string ConfirmPassword,string Email)
         {
-            var user = new IdentityUser
+            ValidateRegister validateRegister = new ValidateRegister(_userManager);
+            validateRegister.GetListOfError(UserName, Password,ConfirmPassword,Email);
+
+
+            if (validateRegister.errors.Count == 0)
             {
-                UserName = username,
-                Email = "",
-            };
-
-            var result = await _userManager.CreateAsync(user,password);
-
-            if(result.Succeeded)
-            {
-                var userClaim = new Claim("Role", "User");
-                _userManager.AddClaimAsync(user, userClaim).GetAwaiter().GetResult();
-
-                var signInResult = await _signInManager.PasswordSignInAsync(user, password, false, false);
-                if (signInResult.Succeeded)
+                var user = new IdentityUser
                 {
-                    return RedirectToAction("Index");
+                    UserName = UserName,
+                    Email = Email,
+                };
+
+                var result = await _userManager.CreateAsync(user, Password);
+
+                if (result.Succeeded)
+                {
+                    var userClaim = new Claim("Role", "User");
+                    _userManager.AddClaimAsync(user, userClaim).GetAwaiter().GetResult();
+
+                    var signInResult = await _signInManager.PasswordSignInAsync(user, Password, false, false);
+                    if (signInResult.Succeeded)
+                    {
+                        return RedirectToAction("Index");
+                    }
                 }
+            }
+            else
+            {
+                return View(validateRegister);
             }
             return RedirectToAction("Index");
         }
@@ -112,6 +122,13 @@ namespace KanbanBoard.Controllers
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index");
+        }
+
+        [Authorize(Policy = "AdminAccess")]
+        public IActionResult Secret()
+        {
+            List<Priority> priorities = _context.Priorities.Where(p => p.ID > 0).ToList();
+            return View(priorities);
         }
     }
 }

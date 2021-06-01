@@ -1,10 +1,41 @@
-﻿@{
+﻿@model KanbanBoard.Models.ValidateLogin
+@{
     ViewData["Title"] = "Login";
 }
-<h1>@ViewData["Title"]</h1>
 
-<form action="/Home/Login" method="post">
-    <input type="text" name="username" value="" />
-    <input type="text" name="password" value="" />
-    <button type="submit">Login</button>
-</form>
+
+<div class="row">
+    <div class="col-md-2 col-lg-3 col-xl-4"></div>
+    <div class="col-md-8 col-lg-5 col-xl-4">
+        <h1 class="text-center">@ViewData["Title"]</h1>
+        <h4 class="text-center">Use a local account to log in.</h4>
+        <hr />
+        @if(Model.errors!=null&&Model.errors.Count != 0)
+        {
+            foreach (var error in Model.errors)
+            {
+                <div class="alert alert-warning" role="alert">
+                    @error
+                </div>
+            }
+        }
+        <form method="post" asp-controller="Home" asp-action="Login">
+            <div class="form-group">
+                <label for="UserName" class="customLogin">Username</label>
+                <input name="UserName" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label for="Password" class="customLogin">Password</label>
+                <input type="password" name="Password" class="form-control" />
+            </div>
+            <div class="form-group text-center mt-4">
+                <button type="submit" class="btn btn-primary btn-lg">Log in</button>
+            </div>
+        </form>
+        <div class="text-center mt-5">
+            <hr />
+            <h6 class="text-center">You don't have an account?</h6>
+            <a href="/Home/Register" class="btn btn-dark btn-lg mt-3">Register</a>
+        </div>
+    </div>
+</div>
