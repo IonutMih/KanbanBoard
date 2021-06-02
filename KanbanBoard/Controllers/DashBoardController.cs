@@ -19,6 +19,12 @@ namespace KanbanBoard.Controllers
         {
             _context = context;
         }
+        
+        [HttpPost]
+        public void Actualize()
+        {
+
+        }
         public IActionResult Index()
         {
 

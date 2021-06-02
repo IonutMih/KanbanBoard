@@ -32,8 +32,10 @@ namespace KanbanBoard.Controllers
 
         public IActionResult Index()
         {
-            
-
+            return RedirectToAction("Test");
+        }
+        public IActionResult Test()
+        {
             return View();
         }
 
