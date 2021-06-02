@@ -77,12 +77,20 @@ body {
 }
 
 .card {
-    max-width: 16rem;
-    min-width:16rem;
     margin-right: 4px;
     margin-left: 4px;
     margin-bottom: 4px;
     margin-top:4px;
+}
+
+.cardbacklog {
+    max-width: 16rem;
+    min-width: 16rem;
+}
+
+.cardother {
+    max-width: 16rem;
+    min-width: 10rem;
 }
 
 .navbar{
@@ -111,12 +119,23 @@ hr {
     box-shadow: 3px 3px grey;
 }
 
-.fa-exclamation-circle
-{
-    color:red;
-}
-
 .vl {
     border-left: 3px solid green;
-    height: 100%;
+    border-right :3px solid green;
+    height: auto;
+}
+
+.vl-right {
+    border-right: 3px solid green;
+    height: auto;
+}
+
+.priority-low {
+    color:green;
+}
+.priority-medium {
+    color:orange;
+}
+.priority-high {
+    color:red;
 }

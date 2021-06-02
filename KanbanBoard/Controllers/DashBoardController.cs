@@ -21,15 +21,16 @@ namespace KanbanBoard.Controllers
         }
         public IActionResult Index()
         {
-            var issue = _context.Issues.Include(u => u.AssignedUser)
-                            .Include(p => p.Project)
-                            .Include(p => p.Priority)
-                            .Include(s => s.State);
-                            
 
             DashboardModel model = new DashboardModel();
 
-            model.issuesInBacklog = issue.Where(i => i.State.Name == "Backlog").ToList();
+            model.issues = _context.Issues.Include(u => u.AssignedUser)
+                            .Include(p => p.Project)
+                            .Include(p => p.Priority)
+                            .Include(s => s.State).ToList();
+
+            model.projects = _context.Projects.Include(u => u.Tasks)
+                            .Include(p => p.Priority).ToList();
 
             return View(model);
         }

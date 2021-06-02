@@ -8,11 +8,13 @@ namespace KanbanBoard.Models
 {
     public class DashboardModel
     {
-        public List<Issue> issuesInBacklog { get; set; }
-
+        public List<Issue> issues { get; set; }
+        public List<Project> projects { get; set; }
         public DashboardModel()
         {
-            issuesInBacklog = new List<Issue>();
+            issues = new List<Issue>();
+
+            projects = new List<Project>();
         }
     }
 }
