@@ -115,3 +115,8 @@ hr {
 {
     color:red;
 }
+
+.vl {
+    border-left: 3px solid green;
+    height: 100%;
+}
