@@ -126,6 +126,12 @@ hr {
     height: auto;
 }
 
+.vl-1 {
+    border-left: 1px solid blue;
+    border-right: 1px solid blue;
+    height: auto;
+}
+
 .vl-right {
     border-right: 3px solid green;
     height: auto;

@@ -31,19 +31,30 @@
 
 <div class="row">
     <div class="col-md-4 col-lg-3 col-xl-2 text-center">
-        <a class="btn btn-primary btn-lg mb-3 col-sm-12" asp-controller="Issue" asp-action="Create">Create new issue</a>
+        <a class="btn btn-primary btn-lg mb-0 col-sm-12" asp-controller="Issue" asp-action="Create">Create new issue</a>
+        <hr />
         <button class="filter btn btn-info mb-3" data-toggle="collapse" data-target="#filter">
             Filters
         </button>
         <div id="filter" class="collapse padding">
-            <div class="container-fluid padding">
-                <div class="row">
-                    <a>Project</a>
+            <form method="post" asp-controller="Dashboard" asp-action="Index">
+                <div>
+                    <h4 class="text-left">Projects:</h4>
                 </div>
-                <div class="row">
-                    <a>User</a>
+                <div class="text-left">
+                    @foreach (var project in Model.allProjects)
+                    {
+                        <label>@project.projectName</label>
+                        <input name="filter.projectFilter" type="checkbox" value="@project.projectName" checked="@project.isChecked" /><br />
+                    }
                 </div>
-            </div>
+                <div>
+                    <h4 class="text-left">Priority:</h4>
+                </div>
+
+                <button class="btn btn-primary btn-lg">Apply filters</button>
+            </form>
+
         </div>
     </div>
     <div class="vl col-md-8 col-lg-9 col-xl-10">
@@ -56,17 +67,23 @@
                 <div class="row padding">
                     @foreach (var issue in Model.issues.Where(i => i.State.Name == "Backlog"))
                     {
-                        <div class="card cardbacklog border-dark">
-                            <div class="card-header">
-                                <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
-                                <a>ID: @issue.ID</a>
-                                <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
-                            </div>
-                            <div class="card-body text-dark">
-                                @*<h5 class="card-title">Dark card title</h5>*@
-                                <div class="card-text"><small>@issue.Summary</small></div>
-                            </div>
+                    <div class="card cardbacklog border-dark">
+                        <div class="card-header">
+                            <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
+                            <a>ID: @issue.ID</a>
+                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                         </div>
+                        <div class="card-body text-dark">
+                            @*<h5 class="card-title">Dark card title</h5>*@
+                            <div class="card-text"><small>@issue.Summary</small></div>
+                        </div>
+                        <div class="card-header">
+                            <div class="float-right">
+                                <i class="far fa-clock"></i> @issue.EstimatedEffort h
+                            </div>
+                            <div class="float-left">@issue.AssignedUser.UserName</div>
+                        </div>
+                    </div>
                     }
                 </div>
             </div>
@@ -94,17 +111,23 @@
                             <div id="@(project.ProjectName+"-Open")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Open"))
                                 {
-                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
-                                        <div class="card-header">
-                                            <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
-                                            <a>ID: @issue.ID</a>
-                                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
-                                        </div>
-                                        <div class="card-body text-dark">
-                                            @*<h5 class="card-title">Dark card title</h5>*@
-                                            <div class="card-text"><small>@issue.Summary</small></div>
-                                        </div>
+                                <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
+                                    <div class="card-header">
+                                        <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
+                                        <a>ID: @issue.ID</a>
+                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
+                                    <div class="card-body text-dark">
+                                        @*<h5 class="card-title">Dark card title</h5>*@
+                                        <div class="card-text"><small>@issue.Summary</small></div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="float-right">
+                                            <i class="far fa-clock"></i> @issue.EstimatedEffort h
+                                        </div>
+                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                    </div>
+                                </div>
                                 }
                             </div>
                         </div>
@@ -120,17 +143,23 @@
                             <div id="@(project.ProjectName+"-Development")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Development"))
                                 {
-                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
-                                        <div class="card-header">
-                                            <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
-                                            <a>ID: @issue.ID</a>
-                                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
-                                        </div>
-                                        <div class="card-body text-dark">
-                                            @*<h5 class="card-title">Dark card title</h5>*@
-                                            <div class="card-text"><small>@issue.Summary</small></div>
-                                        </div>
+                                <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
+                                    <div class="card-header">
+                                        <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
+                                        <a>ID: @issue.ID</a>
+                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
+                                    <div class="card-body text-dark">
+                                        @*<h5 class="card-title">Dark card title</h5>*@
+                                        <div class="card-text"><small>@issue.Summary</small></div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="float-right">
+                                            <i class="far fa-clock"></i> @issue.EstimatedEffort h
+                                        </div>
+                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                    </div>
+                                </div>
                                 }
                             </div>
                         </div>
@@ -146,17 +175,23 @@
                             <div id="@(project.ProjectName+"-Testing")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Testing"))
                                 {
-                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
-                                        <div class="card-header">
-                                            <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
-                                            <a>ID: @issue.ID</a>
-                                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
-                                        </div>
-                                        <div class="card-body text-dark">
-                                            @*<h5 class="card-title">Dark card title</h5>*@
-                                            <div class="card-text"><small>@issue.Summary</small></div>
-                                        </div>
+                                <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
+                                    <div class="card-header">
+                                        <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
+                                        <a>ID: @issue.ID</a>
+                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
+                                    <div class="card-body text-dark">
+                                        @*<h5 class="card-title">Dark card title</h5>*@
+                                        <div class="card-text"><small>@issue.Summary</small></div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="float-right">
+                                            <i class="far fa-clock"></i> @issue.EstimatedEffort h
+                                        </div>
+                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                    </div>
+                                </div>
                                 }
                             </div>
                         </div>
@@ -172,17 +207,23 @@
                             <div id="@(project.ProjectName+"-Closed")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Closed"))
                                 {
-                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
-                                        <div class="card-header">
-                                            <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
-                                            <a>ID: @issue.ID</a>
-                                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
-                                        </div>
-                                        <div class="card-body text-dark">
-                                            @*<h5 class="card-title">Dark card title</h5>*@
-                                            <div class="card-text"><small>@issue.Summary</small></div>
-                                        </div>
+                                <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
+                                    <div class="card-header">
+                                        <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
+                                        <a>ID: @issue.ID</a>
+                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
+                                    <div class="card-body text-dark">
+                                        @*<h5 class="card-title">Dark card title</h5>*@
+                                        <div class="card-text"><small>@issue.Summary</small></div>
+                                    </div>
+                                    <div class="card-header">
+                                        <div class="float-right">
+                                            <i class="far fa-clock"></i> @issue.EstimatedEffort h
+                                        </div>
+                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                    </div>
+                                </div>
                                 }
                             </div>
                         </div>

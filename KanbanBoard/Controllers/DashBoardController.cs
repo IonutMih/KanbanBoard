@@ -41,6 +41,13 @@ namespace KanbanBoard.Controllers
 
             DashboardModel model = new DashboardModel();
 
+            List<string> projectNameList = _context.Projects.Select(p => p.ProjectName).ToList();
+
+            foreach (string pr in projectNameList)
+            {
+                model.allProjects.Add(new ProjectFilterModel(pr));
+            }
+
             model.issues = _context.Issues.Include(u => u.AssignedUser)
                             .Include(p => p.Project)
                             .Include(p => p.Priority)
@@ -48,6 +55,14 @@ namespace KanbanBoard.Controllers
 
             model.projects = _context.Projects.Include(u => u.Tasks)
                             .Include(p => p.Priority).ToList();
+
+            return View(model);
+        }
+        [HttpPost]
+        public IActionResult Index(DashboardModel model)
+        {
+
+            model.ApplyFilter(_context);
 
             return View(model);
         }

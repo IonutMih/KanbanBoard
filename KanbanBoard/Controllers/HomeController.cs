@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace KanbanBoard.Controllers
 {
+    
     public class HomeController : Controller
     {
         private readonly AppDbContext _context;
@@ -29,12 +30,8 @@ namespace KanbanBoard.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
-
+        [Authorize]
         public IActionResult Index()
-        {
-            return RedirectToAction("Test");
-        }
-        public IActionResult Test()
         {
             return View();
         }
@@ -72,13 +69,14 @@ namespace KanbanBoard.Controllers
             }
             return RedirectToAction("Index");
         }
-
+        [Authorize(Policy = "ManagerAccess")]
+        [HttpGet]
         public IActionResult Register()
         {
             return View(new ValidateRegister());
         }
 
-
+        [Authorize(Policy = "ManagerAccess")]
         [HttpPost]
         public async Task<IActionResult> Register(string UserName, string Password,
                                                   string ConfirmPassword,string Email)
