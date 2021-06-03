@@ -21,9 +21,20 @@ namespace KanbanBoard.Controllers
         }
         
         [HttpPost]
-        public void Actualize()
+        public async Task Actualize(string item, string to)
         {
+            int ID = Int32.Parse(item.Split('-').Last());
+            string ProjectNam = item.Split('-')[0];
+            string movedTo = to.Split('-').Last();
 
+            var newState = _context.KanbanFlag.FirstOrDefault(k => k.Name == movedTo);
+
+            if (newState != null)
+            {
+                var issue = _context.Issues.FirstOrDefault(i => i.ID == ID);
+                issue.State = newState;
+                await _context.SaveChangesAsync();
+            }
         }
         public IActionResult Index()
         {

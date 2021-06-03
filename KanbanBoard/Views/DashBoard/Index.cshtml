@@ -3,28 +3,31 @@
     ViewData["Title"] = "Dashboard";
 }
 
+@foreach (var project in Model.projects)
+{
 <script>
     $(function () {
-        $("#LicentaOpen, #LicentaDevelopment, #LicentaTesting, #LicentaClosed").sortable({
-            connectWith: "#LicentaOpen, #LicentaDevelopment, #LicentaTesting, #LicentaClosed",
-
+        $("#@project.ProjectName-Open, #@project.ProjectName-Development, #@project.ProjectName-Testing, #@project.ProjectName-Closed").sortable({
+            connectWith: "#@project.ProjectName-Open, #@project.ProjectName-Development, #@project.ProjectName-Testing, #@project.ProjectName-Closed",
+            dropOnEmpty: true,
             update: function (event, ui) {
                 if (this === ui.item.parent()[0]) {
-                    var data = $(this).sortable('serialize');
-                    // POST to server using $.post or $.ajax
-                    alert(ui.item.parent()[0].id),
+                    //TODO: BE ABLE TO CHANGE ORDER OF THE ISSUES IN THE SAME STATE. USE THE EXEMPLE BELOW
+                    //($(this).sortable('serialize'));
+
                         $.ajax({
-                            data: { 'id': 5 },
+                            data: { 'item': ui.item.attr('id'), 'to' : ui.item.parent()[0].id },
                             type: 'POST',
                             url: '/DashBoard/Actualize'
                         });
                 }
             }
         });
-        
+
 
     });
 </script>
+}
 
 <div class="row">
     <div class="col-md-4 col-lg-3 col-xl-2 text-center">
@@ -88,10 +91,10 @@
                                     <hr />
                                 </div>
                             </div>
-                            <div id="@(project.ProjectName+"Open")">
+                            <div id="@(project.ProjectName+"-Open")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Open"))
                                 {
-                                    <div class="card cardother border-dark">
+                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                         <div class="card-header">
                                             <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                             <a>ID: @issue.ID</a>
@@ -114,10 +117,10 @@
                                     <hr />
                                 </div>
                             </div>
-                            <div id="@(project.ProjectName+"Development")">
+                            <div id="@(project.ProjectName+"-Development")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Development"))
                                 {
-                                    <div class="card cardother border-dark">
+                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                         <div class="card-header">
                                             <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                             <a>ID: @issue.ID</a>
@@ -140,10 +143,10 @@
                                     <hr />
                                 </div>
                             </div>
-                            <div id="@(project.ProjectName+"Testing")">
+                            <div id="@(project.ProjectName+"-Testing")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Testing"))
                                 {
-                                    <div class="card cardother border-dark">
+                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                         <div class="card-header">
                                             <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                             <a>ID: @issue.ID</a>
@@ -166,10 +169,10 @@
                                     <hr />
                                 </div>
                             </div>
-                            <div id="@(project.ProjectName+"Closed")">
+                            <div id="@(project.ProjectName+"-Closed")" class="full-width-height">
                                 @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Closed"))
                                 {
-                                    <div class="card cardother border-dark">
+                                    <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                         <div class="card-header">
                                             <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                             <a>ID: @issue.ID</a>
