@@ -23,8 +23,6 @@
                 }
             }
         });
-
-
     });
 </script>
 }
@@ -32,6 +30,10 @@
 <div class="row">
     <div class="col-md-4 col-lg-3 col-xl-2 text-center">
         <a class="btn btn-primary btn-lg mb-0 col-sm-12" asp-controller="Issue" asp-action="Create">Create new issue</a>
+        @if (User.HasClaim(c=>c.Type=="Role"&&c.Value=="Manager"))
+        {
+        <a class="btn btn-primary btn-lg mt-4 mb-0 col-sm-12" asp-controller="Projects" asp-action="Create">Create new project</a>        
+        }
         <hr />
         <button class="filter btn btn-info mb-3" data-toggle="collapse" data-target="#filter">
             Filters
@@ -51,7 +53,13 @@
                 <div>
                     <h4 class="text-left">Priority:</h4>
                 </div>
-
+                <div class="text-left">
+                    @foreach (var priority in Model.allPriorities)
+                    {
+                        <label>@priority.priorityName</label>
+                        <input name="filter.priorityFilter" type="checkbox" value="@priority.priorityName" checked="@priority.isChecked" /><br />
+                    }
+                </div>
                 <button class="btn btn-primary btn-lg">Apply filters</button>
             </form>
 
@@ -81,6 +89,9 @@
                             <div class="float-right">
                                 <i class="far fa-clock"></i> @issue.EstimatedEffort h
                             </div>
+                        <div>
+                            <a class="float-right btn btn-info btn-sm" asp-controller="DashBoard" asp-action="MoveIssueToBoard" asp-route-id="@issue.ID">Open</a>
+                        </div>
                             <div class="float-left">@issue.AssignedUser.UserName</div>
                         </div>
                     </div>
@@ -205,8 +216,8 @@
                                 </div>
                             </div>
                             <div id="@(project.ProjectName+"-Closed")" class="full-width-height">
-                                @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Closed"))
-                                {
+                                @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Done"))
+                                    {
                                 <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                     <div class="card-header">
                                         <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>

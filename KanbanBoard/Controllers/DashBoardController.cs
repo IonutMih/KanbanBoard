@@ -47,6 +47,10 @@ namespace KanbanBoard.Controllers
             {
                 model.allProjects.Add(new ProjectFilterModel(pr));
             }
+            foreach (string pr in _context.Priorities.Select(p=>p.Name).ToList())
+            {
+                model.allPriorities.Add(new PriorityFilterModel(pr));
+            }
 
             model.issues = _context.Issues.Include(u => u.AssignedUser)
                             .Include(p => p.Project)
@@ -56,15 +60,29 @@ namespace KanbanBoard.Controllers
             model.projects = _context.Projects.Include(u => u.Tasks)
                             .Include(p => p.Priority).ToList();
 
+
             return View(model);
         }
         [HttpPost]
         public IActionResult Index(DashboardModel model)
         {
-
+            if(model.filter.priorityFilter.Count==0&&model.filter.projectFilter.Count==0)
+            {
+                return RedirectToAction("Index");
+            }
+            //TODO: vezi cand selectezi ceva si dupa deselectezi si dai filtrare
             model.ApplyFilter(_context);
 
             return View(model);
+        }
+
+        public async Task<IActionResult> MoveIssueToBoard(int id)
+        {
+            var issue = _context.Issues.FirstOrDefault(i => i.ID == id);
+            issue.State = _context.KanbanFlag.FirstOrDefault(s => s.Name == "Open");
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }

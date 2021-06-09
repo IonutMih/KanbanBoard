@@ -10,9 +10,12 @@ namespace KanbanBoard.Models
     {
         public List<string> projectFilter { get; set; }
 
+        public List<string> priorityFilter { get; set; }
+
         public Filter()
         {
             projectFilter = new List<string>();
+            priorityFilter = new List<string>();
         }
 
         
