@@ -40,6 +40,31 @@
         </button>
         <div id="filter" class="collapse padding">
             <form method="post" asp-controller="Dashboard" asp-action="Index">
+                <div class="form-group">
+                    <label for="filter.selectedUser">Assigned To:</label>
+                    <select class="form-control" id="filter.selectedUser" name="filter.selectedUser">
+                        @if (Model.filter.selectedUser == "")
+                        {
+                            <option selected></option>
+                        }
+                        else
+                        {
+                            <option></option>
+                        }
+                        @foreach (var user in Model.userNames)
+                        {
+                            if (user == Model.filter.selectedUser)
+                            {
+                                <option selected>@user</option>
+                            }
+                            else
+                            {
+                                <option>@user</option>
+                            }
+                        }
+                    </select>
+                </div>
+                <hr />
                 <div>
                     <h4 class="text-left">Projects:</h4>
                 </div>
@@ -50,6 +75,7 @@
                         <input name="filter.projectFilter" type="checkbox" value="@project.projectName" checked="@project.isChecked" /><br />
                     }
                 </div>
+                <hr />
                 <div>
                     <h4 class="text-left">Priority:</h4>
                 </div>

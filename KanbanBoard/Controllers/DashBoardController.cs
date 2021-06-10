@@ -1,6 +1,7 @@
 ﻿using KanbanBoard.Data;
 using KanbanBoard.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -14,10 +15,13 @@ namespace KanbanBoard.Controllers
     public class DashBoardController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly UserManager<IdentityUser> _userManager;
 
-        public DashBoardController(AppDbContext context)
+        public DashBoardController(AppDbContext context,
+                                    UserManager<IdentityUser> userManager)
         {
             _context = context;
+            _userManager = userManager;
         }
         
         [HttpPost]
@@ -57,22 +61,28 @@ namespace KanbanBoard.Controllers
                             .Include(p => p.Priority)
                             .Include(s => s.State).ToList();
 
+            model.userNames = _userManager.Users.Select(u => u.UserName).ToList();
+            model.userNames.Sort();
+
             model.projects = _context.Projects.Include(u => u.Tasks)
                             .Include(p => p.Priority).ToList();
-
 
             return View(model);
         }
         [HttpPost]
         public IActionResult Index(DashboardModel model)
         {
-            if(model.filter.priorityFilter.Count==0&&model.filter.projectFilter.Count==0)
+            if(model.filter.priorityFilter.Count==0&&model.filter.projectFilter.Count==0&&model.filter.selectedUser==null)
             {
                 return RedirectToAction("Index");
             }
-            //TODO: vezi cand selectezi ceva si dupa deselectezi si dai filtrare
-            model.ApplyFilter(_context);
 
+            model._context = _context;
+
+            model.ApplyFilters();
+
+            model.userNames = _userManager.Users.Select(u => u.UserName).ToList();
+            model.userNames.Sort();
             return View(model);
         }
 

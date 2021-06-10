@@ -1,5 +1,6 @@
 ﻿using KanbanBoard.Data;
 using KanbanBoard.Models.DataBase;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -11,11 +12,13 @@ namespace KanbanBoard.Models
 {
     public class DashboardModel
     {
+        public AppDbContext _context { get; set; }
+
         public List<ProjectFilterModel> allProjects { get; set; }
         public List<PriorityFilterModel> allPriorities { get; set; }
 
         public List<Issue> issues { get; set; }
-
+        public List<string> userNames { get; set; }
         public List<Project> projects { get; set; }
         public List<Priority> priorities { get; set; }
 
@@ -29,6 +32,8 @@ namespace KanbanBoard.Models
 
             allPriorities = new List<PriorityFilterModel>();
 
+            userNames = new List<string>();
+
             filter = new Filter();
 
             issues = new List<Issue>();
@@ -36,25 +41,33 @@ namespace KanbanBoard.Models
             projects = new List<Project>();
         }
 
+        public void ApplyFilters()
+        {
+            this.issues = _context.Issues.Include(u => u.AssignedUser)
+                           .Include(p => p.Project)
+                           .Include(p => p.Priority)
+                           .Include(s => s.State)
+                           .ToList();
+            this.projects = _context.Projects.Include(u => u.Tasks)
+                                .Include(p => p.Priority)
+                                .ToList();
 
-        public void ApplyFilter(AppDbContext _context)
+            ApplyFilterProject();
+            ApplyFilterPriority();
+            ApplyFilterAssignedUser();
+        }
+
+        public void ApplyFilterProject()
         {
             if (this.filter.projectFilter.Count != 0)
             {
-                this.issues = _context.Issues.Include(u => u.AssignedUser)
-                            .Include(p => p.Project)
-                            .Include(p => p.Priority)
-                            .Include(s => s.State)
-                            .Where(i => this.filter.projectFilter
-                                    .Contains(i.Project.ProjectName))
-                            .ToList();
+                this.issues = this.issues.Where(i => filter.projectFilter
+                                                .Contains(i.Project.ProjectName))
+                                                .ToList();
 
-
-                this.projects = _context.Projects.Include(u => u.Tasks)
-                                .Include(p => p.Priority)
-                                .Where(p => this.filter.projectFilter
-                                        .Contains(p.ProjectName))
-                                .ToList();
+                this.projects = this.projects.Where(p => this.filter.projectFilter
+                                                 .Contains(p.ProjectName))
+                                                .ToList();
 
                 List<string> projectNameList = _context.Projects.Select(p => p.ProjectName).ToList();
 
@@ -67,43 +80,45 @@ namespace KanbanBoard.Models
                     }
                 }
             }
+        }
 
+        public void ApplyFilterPriority()
+        {
             if (this.filter.priorityFilter.Count != 0)
             {
-                if (this.filter.projectFilter.Count != 0)
+                foreach (string project in this.filter.projectFilter)
                 {
-                    foreach(string project in this.filter.projectFilter)
-                    {
-                        this.projects.FirstOrDefault(p=>p.ProjectName==project).Tasks= this.projects.FirstOrDefault(p => p.ProjectName == project)
-                                                                                                .Tasks.Where(i => this.filter.priorityFilter
-                                                                                                .Contains(i.Priority.Name))
-                                                                                                .ToList();
-                    }
-
+                    this.projects.FirstOrDefault(p => p.ProjectName == project).Tasks = this.projects.FirstOrDefault(p => p.ProjectName == project)
+                                                                                            .Tasks.Where(i => this.filter.priorityFilter
+                                                                                            .Contains(i.Priority.Name))
+                                                                                            .ToList();
                 }
-                else
+
+            }
+
+            this.priorities = _context.Priorities.Where(p => this.filter.priorityFilter.Contains(p.Name)).ToList();
+
+            List<string> priorityNameList = _context.Priorities.Select(p => p.Name).ToList();
+
+            foreach (string pr in priorityNameList)
+            {
+                this.allPriorities.Add(new PriorityFilterModel(pr));
+                if (this.priorities.Any(p => p.Name == pr))
                 {
-                    this.issues = _context.Issues.Include(u => u.AssignedUser)
-                           .Include(p => p.Project)
-                           .Include(p => p.Priority)
-                           .Include(s => s.State)
-                           .Where(i => this.filter.priorityFilter
-                                    .Contains(i.Priority.Name))
-                           .ToList();
-                    
+                    this.allPriorities.Last().isChecked = true;
                 }
-                this.priorities = _context.Priorities.Where(p=>this.filter.priorityFilter.Contains(p.Name)).ToList();
+            }
+        }
 
-                List<string> priorityNameList = _context.Priorities.Select(p => p.Name).ToList();
-
-                foreach (string pr in priorityNameList)
+        public void ApplyFilterAssignedUser()
+        {
+            if (this.filter.selectedUser != null && this.filter.selectedUser != "")
+            {
+                foreach (var project in this.projects)
                 {
-                    this.allPriorities.Add(new PriorityFilterModel(pr));
-                    if (this.priorities.Any(p => p.Name == pr))
-                    {
-                        this.allPriorities.Last().isChecked = true;
-                    }
+                    project.Tasks = project.Tasks.Where(i => i.AssignedUser.UserName == this.filter.selectedUser).ToList();
                 }
+                this.issues = this.issues.Where(i => i.AssignedUser.UserName == this.filter.selectedUser).ToList();
             }
         }
     }
