@@ -13,6 +13,7 @@ namespace KanbanBoard.Models
     public class DashboardModel
     {
         public AppDbContext _context { get; set; }
+        public UserManager<IdentityUser> _userManager { get; set; }
 
         public List<ProjectFilterModel> allProjects { get; set; }
         public List<PriorityFilterModel> allPriorities { get; set; }
@@ -51,6 +52,9 @@ namespace KanbanBoard.Models
             this.projects = _context.Projects.Include(u => u.Tasks)
                                 .Include(p => p.Priority)
                                 .ToList();
+
+            this.userNames = _userManager.Users.Select(u => u.UserName).ToList();
+            this.userNames.Sort();
 
             ApplyFilterProject();
             ApplyFilterPriority();

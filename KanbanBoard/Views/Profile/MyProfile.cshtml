@@ -1,0 +1,127 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    /*<div class="row">
+    <div class="col-xl-3 col-lg-2 col-md-1"></div>
+    <div class="col-xl-6 col-lg-8 col-md-10">
+        <div class="col-md-3">
+            <div class="list-group">
+                <a href="Profile/Index" class="list-group-item list-group-item-action active">
+                    Summary
+                </a>
+            </div>
+        </div>
+        <input class="disabled" />
+    </div>
+    </div>*/
+}
+
+<div class="jumbotron jumbotron-fluid">
+
+    <div class="container emp-profile">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Skills</div>
+                    <div class="card-body">
+                        <p class="mb-1">Web Designer</p>
+                        <p class="mb-1">Web Designer</p>
+                        <p class="mb-1">Web Designer</p>
+                        <p class="mb-1">Web Designer</p>
+                        <p class="mb-1">Web Designer</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <button class="btn btn-info mb-3" data-toggle="collapse" data-target="#addSkill">
+                    Add skill
+                    <i class="fas fa-arrows-alt-v"></i>
+                </button>
+                <div id="addSkill" class="collapse padding">
+                    <form asp-controller="Profile" asp-action="AddSkill" method="post">
+                        <div class="form-group">
+                            <label for="SkillAdded">Skill</label>
+                            <input type="text" class="form-control" id="SkillAdded" name="SkillAdded">
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Add</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2">
+                <button class="btn btn-info ">Edit Profile</button>
+            </div>
+            <hr />
+        </div>
+            <div class="row jumbotron jumbotron-fluid">
+                <div class="col-md-4 ml-3">
+                    <div class="list-group">
+                        <a href="Profile/Index" class="list-group-item list-group-item-action active">
+                            Summary
+                        </a>
+                        <a href="Profile/Index" class="list-group-item list-group-item-action">
+                            Summary
+                        </a>
+                        <a href="Profile/Index" class="list-group-item list-group-item-action">
+                            Summary
+                        </a>
+                        <a href="Profile/Index" class="list-group-item list-group-item-action">
+                            Summary
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7">
+                    <div class="tab-content profile-tab" id="myTabContent">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>User Id</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Kshiti123</p>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Name</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Kshiti Ghelani</p>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Email</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>kshitighelani@gmail.com</p>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Phone</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>123 456 7890</p>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label>Profession</label>
+                            </div>
+                            <div class="col-md-6">
+                                <p>Web Developer and Designer</p>
+                            </div>
+                        </div>
+                        <hr class="mt-1 mb-1" />
+                    </div>
+
+                </div>
+            </div>
+       
+    </div>
+</div>

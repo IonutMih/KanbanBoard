@@ -78,11 +78,10 @@ namespace KanbanBoard.Controllers
             }
 
             model._context = _context;
+            model._userManager = _userManager;
 
             model.ApplyFilters();
 
-            model.userNames = _userManager.Users.Select(u => u.UserName).ToList();
-            model.userNames.Sort();
             return View(model);
         }
 
