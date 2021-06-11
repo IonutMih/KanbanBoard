@@ -21,6 +21,9 @@ namespace KanbanBoard.Data
         public virtual DbSet<Priority> Priorities { get; set; }
         public virtual DbSet<Project> Projects { get; set; }
         public virtual DbSet<KanbanFlag> KanbanFlag { get; set; }
+        public virtual DbSet<UserSkill> UserSkills { get; set; }
+        public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<UserDetails> UserDetalis { get; set; }
 
 
     }

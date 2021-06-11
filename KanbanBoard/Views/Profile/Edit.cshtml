@@ -1,0 +1,124 @@
+﻿@model ProfileModel
+
+<div class="jumbotron jumbotron-fluid">
+
+    <div class="container emp-profile">
+        <div class="row">
+            <div class="col-md-3">
+                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                    <div class="card-header">Skills</div>
+                    <div class="card-body">
+                        @if (Model.skills != null)
+                        {
+                            @foreach (var skill in Model.skills)
+                            {
+                                <p class="mb-1">
+                                    @skill.skill.SkillName
+                                    <a asp-controller="Profile" asp-action="RemoveSkill" asp-route-SkillName="@skill.skill.SkillName" class="btn btn-sm delete-skill">x</a>
+                                </p>
+
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 text-center">
+                <button class="btn btn-info mb-3" data-toggle="collapse" data-target="#addSkill">
+                    Add skill
+                    <i class="fas fa-arrows-alt-v"></i>
+                </button>
+                <div id="addSkill" class="collapse padding">
+                    <form asp-controller="Profile" asp-action="AddSkill" method="post">
+                        <div class="form-group">
+                            <label for="SkillAdded">Skill</label>
+                            <select class="form-control" id="SkillAdded" name="SkillAdded">
+                                @foreach (var skill in Model.allSkils)
+                                {
+                                    <option>@skill.SkillName</option>
+                                }
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary mb-2">Add</button>
+                    </form>
+                </div>
+            </div>
+            <div class="col-md-4"></div>
+            <div class="col-md-2">
+                <button class="btn btn-info ">Edit Profile</button>
+            </div>
+            <hr />
+        </div>
+        <div class="row jumbotron jumbotron-fluid">
+            <div class="col-md-4 ml-3">
+                <div class="list-group">
+                    <a asp-controller="Profile" asp-action="MyProfile" class="list-group-item list-group-item-action active">
+                        Overview
+                    </a>
+                    <a asp-controller="Profile" asp-action="ChangePassword" class="list-group-item list-group-item-action">
+                        Change Password
+                    </a>
+                    <a asp-controller="Profile" asp-action="ChangeEmail" class="list-group-item list-group-item-action">
+                        Change Email
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="row">
+                        <form class="col-12" method="post" asp-controller="Profile" asp-action="EditProfile">
+                            <fieldset>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Username">Username</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input disabled type="text" id="Username" name="Username" class="form-control" value="Mac">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Name">Name</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Name" name="Name" class="form-control" value="@Model.details.Name">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="PhoneNumber">Phone Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.user.PhoneNumber">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Address">Address</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Address" name="Address" class="form-control" value="@Model.details.Address">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Description">Description</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Description" name="Description" class="form-control" value="@Model.details.Description">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <button type="submit" class="btn btn-primary mb-2">Edit</button>
+                            <hr class="mt-1 mb-1" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

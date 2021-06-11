@@ -1,21 +1,4 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-    /*<div class="row">
-    <div class="col-xl-3 col-lg-2 col-md-1"></div>
-    <div class="col-xl-6 col-lg-8 col-md-10">
-        <div class="col-md-3">
-            <div class="list-group">
-                <a href="Profile/Index" class="list-group-item list-group-item-action active">
-                    Summary
-                </a>
-            </div>
-        </div>
-        <input class="disabled" />
-    </div>
-    </div>*/
-}
+﻿@model ProfileModel
 
 <div class="jumbotron jumbotron-fluid">
 
@@ -25,11 +8,17 @@
                 <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
                     <div class="card-header">Skills</div>
                     <div class="card-body">
-                        <p class="mb-1">Web Designer</p>
-                        <p class="mb-1">Web Designer</p>
-                        <p class="mb-1">Web Designer</p>
-                        <p class="mb-1">Web Designer</p>
-                        <p class="mb-1">Web Designer</p>
+                        @if (Model.skills != null)
+                        {
+                            @foreach (var skill in Model.skills)
+                            {
+                                <p class="mb-1">
+                                    @skill.skill.SkillName
+                                    <a asp-controller="Profile" asp-action="RemoveSkill" asp-route-SkillName="@skill.skill.SkillName" class="btn btn-sm delete-skill">x</a>
+                                </p>
+
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -42,7 +31,12 @@
                     <form asp-controller="Profile" asp-action="AddSkill" method="post">
                         <div class="form-group">
                             <label for="SkillAdded">Skill</label>
-                            <input type="text" class="form-control" id="SkillAdded" name="SkillAdded">
+                            <select class="form-control" id="SkillAdded" name="SkillAdded">
+                                @foreach (var skill in Model.allSkils)
+                                {
+                                    <option>@skill.SkillName</option>
+                                }
+                            </select>
                         </div>
                         <button type="submit" class="btn btn-primary mb-2">Add</button>
                     </form>
@@ -50,78 +44,80 @@
             </div>
             <div class="col-md-4"></div>
             <div class="col-md-2">
-                <button class="btn btn-info ">Edit Profile</button>
+                <a  asp-controller="Profile" asp-action="Edit" class="btn btn-info ">Edit Profile</a>
             </div>
             <hr />
         </div>
-            <div class="row jumbotron jumbotron-fluid">
-                <div class="col-md-4 ml-3">
-                    <div class="list-group">
-                        <a href="Profile/Index" class="list-group-item list-group-item-action active">
-                            Summary
-                        </a>
-                        <a href="Profile/Index" class="list-group-item list-group-item-action">
-                            Summary
-                        </a>
-                        <a href="Profile/Index" class="list-group-item list-group-item-action">
-                            Summary
-                        </a>
-                        <a href="Profile/Index" class="list-group-item list-group-item-action">
-                            Summary
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-7">
-                    <div class="tab-content profile-tab" id="myTabContent">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>User Id</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Kshiti123</p>
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1" />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Name</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Kshiti Ghelani</p>
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1" />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Email</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>kshitighelani@gmail.com</p>
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1" />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Phone</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>123 456 7890</p>
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1" />
-                        <div class="row">
-                            <div class="col-md-4">
-                                <label>Profession</label>
-                            </div>
-                            <div class="col-md-6">
-                                <p>Web Developer and Designer</p>
-                            </div>
-                        </div>
-                        <hr class="mt-1 mb-1" />
-                    </div>
-
+        <div class="row jumbotron jumbotron-fluid">
+            <div class="col-md-4 ml-3">
+                <div class="list-group">
+                    <a asp-controller="Profile" asp-action="MyProfile" class="list-group-item list-group-item-action active">
+                        Overview
+                    </a>
+                    <a asp-controller="Profile" asp-action="ChangePassword" class="list-group-item list-group-item-action">
+                        Change Password
+                    </a>
+                    <a asp-controller="Profile" asp-action="ChangeEmail" class="list-group-item list-group-item-action">
+                        Change Email
+                    </a>
                 </div>
             </div>
-       
+            <div class="col-md-7">
+                <div class="tab-content profile-tab" id="myTabContent">
+                    <div class="row" >
+                            <form class="col-12">
+                                <fieldset disabled>
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label for="Username">Username</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Username" name="Username" class="form-control" value="Mac">
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label for="Name">Name</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Name" name="Name" class="form-control" value="@Model.details.Name">
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label for="PhoneNumber">Phone Number</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.user.PhoneNumber">
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label for="Address">Address</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Address" name="Address" class="form-control" value="@Model.details.Address">
+                                        </div>
+                                    </div>
+                                    <hr />
+                                    <div class="form-group row">
+                                        <div class="col-md-4">
+                                            <label for="Description">Description</label>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <input type="text" id="Description" name="Description" class="form-control" value="@Model.details.Description">
+                                        </div>
+                                    </div>
+                                </fieldset>
+                                <hr class="mt-1 mb-1" />
+                            </form>
+                        </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </div>
