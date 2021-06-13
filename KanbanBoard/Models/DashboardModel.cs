@@ -53,6 +53,13 @@ namespace KanbanBoard.Models
                                 .Include(p => p.Priority)
                                 .ToList();
 
+            List<string> projectNameList = _context.Projects.Select(p => p.ProjectName).ToList();
+
+            foreach (string pr in projectNameList)
+            {
+                this.allProjects.Add(new ProjectFilterModel(pr));
+            }
+
             this.userNames = _userManager.Users.Select(u => u.UserName).ToList();
             this.userNames.Sort();
 

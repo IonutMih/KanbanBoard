@@ -42,9 +42,9 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-4"></div>
-            <div class="col-md-2">
-                <a  asp-controller="Profile" asp-action="Edit" class="btn btn-info ">Edit Profile</a>
+            <div class="col-md-5 text-center">
+                <a asp-controller="Profile" asp-action="Edit" class="btn btn-info mb-3">Edit Profile</a><br />
+                <a asp-controller="DashBoard" asp-action="TasksAssignedTo" asp-route-userName="@User.Identity.Name" class="btn btn-info ">Tasks Assigned to me</a>
             </div>
             <hr />
         </div>
@@ -64,57 +64,66 @@
             </div>
             <div class="col-md-7">
                 <div class="tab-content profile-tab" id="myTabContent">
-                    <div class="row" >
-                            <form class="col-12">
-                                <fieldset disabled>
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label for="Username">Username</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="Username" name="Username" class="form-control" value="Mac">
-                                        </div>
+                    <div class="row">
+                        <form class="col-12">
+                            <fieldset disabled>
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Username">Username</label>
                                     </div>
-                                    <hr />
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label for="Name">Name</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="Name" name="Name" class="form-control" value="@Model.details.Name">
-                                        </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Username" name="Username" class="form-control" value="@Model.user.UserName">
                                     </div>
-                                    <hr />
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label for="PhoneNumber">Phone Number</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.user.PhoneNumber">
-                                        </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Name">Name</label>
                                     </div>
-                                    <hr />
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label for="Address">Address</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="Address" name="Address" class="form-control" value="@Model.details.Address">
-                                        </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Name" name="Name" class="form-control" value="@Model.details.Name">
                                     </div>
-                                    <hr />
-                                    <div class="form-group row">
-                                        <div class="col-md-4">
-                                            <label for="Description">Description</label>
-                                        </div>
-                                        <div class="col-md-8">
-                                            <input type="text" id="Description" name="Description" class="form-control" value="@Model.details.Description">
-                                        </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Email">Email</label>
                                     </div>
-                                </fieldset>
-                                <hr class="mt-1 mb-1" />
-                            </form>
-                        </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Email" name="Email" class="form-control" value="@Model.user.Email">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="PhoneNumber">Phone Number</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.user.PhoneNumber">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Address">Address</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Address" name="Address" class="form-control" value="@Model.details.Address">
+                                    </div>
+                                </div>
+                                <hr />
+                                <div class="form-group row">
+                                    <div class="col-md-4">
+                                        <label for="Description">Description</label>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <input type="text" id="Description" name="Description" class="form-control" value="@Model.details.Description">
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <hr class="mt-1 mb-1" />
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>

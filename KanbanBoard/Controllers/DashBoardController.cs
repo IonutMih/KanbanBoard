@@ -23,7 +23,20 @@ namespace KanbanBoard.Controllers
             _context = context;
             _userManager = userManager;
         }
-        
+
+        public IActionResult TasksAssignedTo(string userName)
+        {
+            DashboardModel model = new DashboardModel();
+            model.filter.selectedUser = userName;
+
+            model._context = _context;
+            model._userManager = _userManager;
+
+            model.ApplyFilters();
+
+            return View("Index",model);
+        }
+
         [HttpPost]
         public async Task Actualize(string item, string to)
         {

@@ -22,7 +22,7 @@ namespace KanbanBoard.Controllers
             _context = context;
             _userManager = userManager;
         }
-        public IActionResult Index()
+        public IActionResult Index(string test)
         {
             return RedirectToAction("MyProfile");
         }
@@ -197,6 +197,33 @@ namespace KanbanBoard.Controllers
             {
                 model.errors.Add("Email is incorrect");
             }
+            return View(model);
+        }
+
+        [Route("Profile/Details/{username?}")]
+        public async Task<IActionResult> Details(string username)
+        {
+
+            ProfileModel model = new ProfileModel();
+
+            var user = _userManager.Users.FirstOrDefault(u => u.UserName == username);
+
+            model.user = user;
+            model.skills = await _context.UserSkills
+                .Include(u => u.user)
+                .Include(s => s.skill)
+                .Where(s => s.user == model.user).ToListAsync();
+
+            if (_context.UserDetalis.Any(ud => ud.user == model.user))
+            {
+                var userDetails = _context.UserDetalis.Include(u => u.user).Where(ud => ud.user == model.user).First();
+                model.details = userDetails;
+            }
+            else
+            {
+                model.details = new UserDetails();
+            }
+
             return View(model);
         }
     }
