@@ -35,22 +35,30 @@ namespace KanbanBoard.Controllers
         [HttpPost]
         public async Task<IActionResult> Create(string ProjectName)
         {
-            Project project = new Project();
-            project.ProjectName = ProjectName;
-
-            var checkForDuplicates = _context.Projects.Any(p => p.ProjectName == ProjectName);
-
-            if(checkForDuplicates==false)
+            if (ProjectName != null && ProjectName != "")
             {
-                await _context.Projects.AddAsync(project);
-                await _context.SaveChangesAsync();
+                Project project = new Project();
+                project.ProjectName = ProjectName;
+
+
+                if (!_context.Projects.Any(p => p.ProjectName == ProjectName))
+                {
+                    await _context.Projects.AddAsync(project);
+                    await _context.SaveChangesAsync();
+                    TempData["SuccesfullyCreated"] = "The project was created.";
+                    return View();
+                }
+                else
+                {
+                    TempData["ProjectExists"] = "There is another project with the same name.";
+                    return View();
+                }
             }
             else
             {
-                //TODO:ERROR MESSAGE
+                TempData["InvalidName"] = "The project name is not valid.";
+                return View();
             }
-
-            return RedirectToAction("Index");
         }
 
         [HttpPost]

@@ -1,0 +1,120 @@
+﻿@model ProfileModel
+
+<div class="jumbotron jumbotron-fluid">
+    <div class="container emp-profile">
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post" asp-controller="Profile" asp-action="ChangeRole" asp-route-username="@Model.user.UserName" asp-route-claim="@Model.userRole">
+                    <div class="form-group">
+                        <label for="RoleName">Role</label>
+                        <select class="form-control" id="RoleName" name="RoleName" onchange="this.form.submit()">
+                            <option selected>@Model.userRole</option>
+                            @if (Model.userRole == "Admin")
+                            {
+                                <option>Manager</option>
+                                <option>User</option>
+                            }
+                            else
+                        @if (Model.userRole == "Manager")
+                            {
+                                <option>Admin</option>
+                                <option>User</option>
+                            }
+                            else
+                        @if (Model.userRole == "User")
+                            {
+                                <option>Admin</option>
+                                <option>Manager</option>
+                            }
+                    </select>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4"></div>
+        <div class="col-md-2">
+            <a class="btn btn-danger btn-lg" asp-controller="Profile" asp-action="DeleteAccount" asp-route-username="@Model.user.UserName">Delete</a>
+        </div>
+    </div>
+    <div class="row jumbotron jumbotron-fluid">
+        <div class="col-md-4">
+            <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+                <div class="card-header">Skills</div>
+                <div class="card-body">
+                    @if (Model.skills != null)
+                    {
+                        @foreach (var skill in Model.skills)
+                        {
+                            <p class="mb-1">
+                                @skill.skill.SkillName
+                            </p>
+
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="col-md-7">
+            <div class="tab-content profile-tab" id="myTabContent">
+                <form class="col-12" method="post" asp-controller="Profile" asp-action="EditProfile">
+                    <fieldset>
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="Username">Username</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="Username" name="Username" class="form-control" value="@Model.user.UserName">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="Name">Name</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="Name" name="Name" class="form-control" value="@Model.details.Name">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="Email">Email</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="Email" name="Email" class="form-control" value="@Model.user.Email">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="PhoneNumber">Phone Number</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="PhoneNumber" name="PhoneNumber" class="form-control" value="@Model.user.PhoneNumber">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="Address">Address</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="Address" name="Address" class="form-control" value="@Model.details.Address">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-md-4">
+                                <label for="Description">Description</label>
+                            </div>
+                            <div class="col-md-8">
+                                <input disabled type="text" id="Description" name="Description" class="form-control" value="@Model.details.Description">
+                            </div>
+                        </div>
+                    </fieldset>
+                    <hr class="mt-1 mb-1" />
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

@@ -3,48 +3,7 @@
 <div class="jumbotron jumbotron-fluid">
 
     <div class="container emp-profile">
-        <div class="row">
-            <div class="col-md-3">
-                <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Skills</div>
-                    <div class="card-body">
-                        @if (Model.skills != null)
-                        {
-                            @foreach (var skill in Model.skills)
-                            {
-                                <p class="mb-1">
-                                    @skill.skill.SkillName
-                                    <a asp-controller="Profile" asp-action="RemoveSkill" asp-route-SkillName="@skill.skill.SkillName" class="btn btn-sm delete-skill">x</a>
-                                </p>
-
-                            }
-                        }
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 text-center">
-                <button class="btn btn-info mb-3" data-toggle="collapse" data-target="#addSkill">
-                    Add skill
-                    <i class="fas fa-arrows-alt-v"></i>
-                </button>
-                <div id="addSkill" class="collapse padding">
-                    <form asp-controller="Profile" asp-action="AddSkill" method="post">
-                        <div class="form-group">
-                            <label for="SkillAdded">Skill</label>
-                            <select class="form-control" id="SkillAdded" name="SkillAdded">
-                                @foreach (var skill in Model.allSkils)
-                                {
-                                    <option>@skill.SkillName</option>
-                                }
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary mb-2">Add</button>
-                    </form>
-                </div>
-            </div>
-            <div class="col-md-4"></div>
-
-        </div>
+       
         <div class="row jumbotron jumbotron-fluid">
             <div class="col-md-4 ml-3">
                 <div class="list-group">
@@ -69,7 +28,7 @@
                                         <label for="Username">Username</label>
                                     </div>
                                     <div class="col-md-8">
-                                        <input disabled type="text" id="Username" name="Username" class="form-control" value="Mac">
+                                        <input disabled type="text" id="Username" name="Username" class="form-control" value="@Model.user.UserName">
                                     </div>
                                 </div>
                                 <hr />
@@ -118,7 +77,9 @@
                                     </div>
                                 </div>
                             </fieldset>
-                            <button type="submit" class="btn btn-primary mb-2">Edit</button>
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary mb-2 btn-lg">Edit</button>
+                            </div>
                             <hr class="mt-1 mb-1" />
                         </form>
                     </div>

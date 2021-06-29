@@ -4,11 +4,13 @@
 *@
 
 
-<h1>Create task</h1>
-<br />
+
 
 <div class="row">
+    <div class="col-md-3"></div>
     <div class="col-md-6">
+        <h1 class="text-center">Create task</h1>
+        <br />
         <form asp-controller="Issue" asp-action="Create" method="post">
             <div class="form-group">
                 <label for="AssignedUser">Assigned User</label>
@@ -53,7 +55,9 @@
                     }
                 </select>
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Create</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mb-2 btn-lg">Create</button>
+            </div>
         </form>
     </div>
 </div>

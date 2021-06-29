@@ -30,16 +30,35 @@ namespace KanbanBoard.Controllers
             _userManager = userManager;
             _signInManager = signInManager;
         }
+
         [Authorize]
         public IActionResult Index()
         {
             return View();
         }
 
-        [Authorize]
-        public IActionResult Privacy()
+        [Authorize(Policy = "ManagerAccess")]
+        public IActionResult RegisterLink()
         {
             return View();
+        }
+
+        [Authorize(Policy = "ManagerAccess")]
+        [HttpPost]
+        public async Task<IActionResult> AddNewUser(string email)
+        {
+            if (email != null && email != "" && !_userManager.Users.Any(u=>u.Email==email))
+            {
+                RegisterCode model = new RegisterCode(email);
+                _context.RegisterEmails.Add(model);
+                await _context.SaveChangesAsync();
+                TempData["Success"] = "The user can register using this email";
+            }
+            else
+            {
+                TempData["Error"] = "An account with the same email is already existing";
+            }
+            return View("RegisterLink");
         }
 
 
@@ -65,51 +84,60 @@ namespace KanbanBoard.Controllers
             }
             else
             {
-                return View(validateLogin);
+                 return View(validateLogin);
             }
             return RedirectToAction("Index");
         }
-        [Authorize(Policy = "ManagerAccess")]
+
         [HttpGet]
         public IActionResult Register()
         {
             return View(new ValidateRegister());
         }
 
-        [Authorize(Policy = "ManagerAccess")]
+
         [HttpPost]
         public async Task<IActionResult> Register(string UserName, string Password,
                                                   string ConfirmPassword,string Email)
         {
-            ValidateRegister validateRegister = new ValidateRegister(_userManager);
-            validateRegister.GetListOfError(UserName, Password,ConfirmPassword,Email);
-
-
-            if (validateRegister.errors.Count == 0)
+            if (_context.RegisterEmails.Any(r => r.Email == Email))
             {
-                var user = new IdentityUser
+
+                ValidateRegister validateRegister = new ValidateRegister(_userManager);
+                validateRegister.GetListOfError(UserName, Password, ConfirmPassword, Email);
+
+
+                if (validateRegister.errors.Count == 0)
                 {
-                    UserName = UserName,
-                    Email = Email,
-                };
-
-                var result = await _userManager.CreateAsync(user, Password);
-
-                if (result.Succeeded)
-                {
-                    var userClaim = new Claim("Role", "User");
-                    _userManager.AddClaimAsync(user, userClaim).GetAwaiter().GetResult();
-
-                    var signInResult = await _signInManager.PasswordSignInAsync(user, Password, false, false);
-                    if (signInResult.Succeeded)
+                    var user = new IdentityUser
                     {
-                        return RedirectToAction("Index");
+                        UserName = UserName,
+                        Email = Email,
+                    };
+
+                    var result = await _userManager.CreateAsync(user, Password);
+
+                    if (result.Succeeded)
+                    {
+                        var userClaim = new Claim("Role", "User");
+                        _userManager.AddClaimAsync(user, userClaim).GetAwaiter().GetResult();
+
+                        var signInResult = await _signInManager.PasswordSignInAsync(user, Password, false, false);
+                        if (signInResult.Succeeded)
+                        {
+                            return RedirectToAction("Index");
+                        }
                     }
+                }
+                else
+                {
+                    return View(validateRegister);
                 }
             }
             else
             {
-                return View(validateRegister);
+                TempData["ErrorWhileRegister"] = "This email is not autorize to be used";
+                return View();
             }
             return RedirectToAction("Index");
         }
@@ -119,18 +147,12 @@ namespace KanbanBoard.Controllers
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
-
+        [Authorize]
         public async Task<IActionResult> LogOut()
         {
             await _signInManager.SignOutAsync();
             return RedirectToAction("Index");
         }
 
-        [Authorize(Policy = "AdminAccess")]
-        public IActionResult Secret()
-        {
-            List<Priority> priorities = _context.Priorities.Where(p => p.ID > 0).ToList();
-            return View(priorities);
-        }
     }
 }

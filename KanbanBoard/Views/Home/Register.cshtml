@@ -1,4 +1,5 @@
-﻿@{
+﻿@model ValidateRegister
+@{
     ViewData["Title"] = "Register";
 }
 
@@ -8,12 +9,19 @@
     <div class="col-md-8 col-lg-5 col-xl-4">
         <div class="jumbotron">
             <h1 class="text-center">@ViewData["Title"]</h1>
+            @if (TempData["ErrorWhileRegister"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["ErrorWhileRegister"]
+                </div>
+            }
+
             <hr />
-            @if (Model.errors != null && Model.errors.Count != 0)
+            @if (Model!=null && Model.errors != null && Model.errors.Count != 0)
             {
                 foreach (var error in Model.errors)
                 {
-                    <div class="alert alert-warning" role="alert">
+                    <div class="alert alert-danger" role="alert">
                         @error
                     </div>
                 }

@@ -30,7 +30,6 @@ namespace KanbanBoard.Controllers
         }
 
         [HttpGet]
-        [Authorize(Policy = "ManagerAccess")]
         public IActionResult Create()
         {
             CreateIssueModel model = new CreateIssueModel();
@@ -39,6 +38,22 @@ namespace KanbanBoard.Controllers
             model.Users = _userManager.Users.OrderBy(u=>u.UserName).ToList();
 
             return View(model);
+        }
+
+        [Authorize(Policy = "ManagerAccess")]
+        [Route("Issue/Delete/{id}")]
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id != null)
+            {
+                var issue = _context.Issues.FirstOrDefault(i => i.ID == id);
+                if (issue != null)
+                {
+                    _context.Issues.Remove(issue);
+                    await _context.SaveChangesAsync();
+                }
+            }
+            return RedirectToAction("Index", "Dashboard");
         }
 
         [HttpGet]
@@ -101,7 +116,6 @@ namespace KanbanBoard.Controllers
         }
 
         [HttpPost]
-        [Authorize(Policy = "ManagerAccess")]
         public async Task<IActionResult> Edit(int? id, Issue issue,
                                 string Project, string AssignedUser,
                                 string Priority,string State)

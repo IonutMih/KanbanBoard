@@ -2,14 +2,91 @@
 @*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<ul class="list-group">
-    <li class="list-group-item">Issue: @Model.ID</li>
-    <li class="list-group-item">Assigned User: @Model.AssignedUser.UserName</li>
-    <li class="list-group-item">Summary: @Model.Summary</li>
-    <li class="list-group-item">Project: @Model.Project.ProjectName</li>
-    <li class="list-group-item">Project: @Model.Priority.Name</li>
-    <li class="list-group-item">Creation Date: @Model.StartDate</li>
-    <li class="list-group-item">Due Date: @Model.RequestedCloseDate</li>
-    <li class="list-group-item">Kanban Flag: @Model.State</li>
-    <li class="list-group-item">Estimated Effort: @Model.EstimatedEffort</li>
-</ul>
+@{
+    var creationDate = Model.StartDate.Year + "-";
+    if (!(Model.StartDate.Month > 9))
+    {
+        creationDate += "0";
+    }
+    creationDate += @Model.StartDate.Month + "-";
+    if (!(Model.StartDate.Day > 9))
+    {
+        creationDate += "0";
+    }
+    creationDate += @Model.StartDate.Day;
+    var dueDate = @Model.RequestedCloseDate.Year + "-";
+    if (!(Model.RequestedCloseDate.Month > 9))
+    {
+        dueDate += "0";
+    }
+    dueDate += @Model.RequestedCloseDate.Month + "-";
+    if (!(Model.RequestedCloseDate.Day > 9))
+    {
+        dueDate += "0";
+    }
+    dueDate += @Model.RequestedCloseDate.Day;
+}
+
+
+<div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6 text-center">
+                <h1>Details Task @Model.ID</h1>
+            </div>
+
+            <div class="col-md-3 text-center">
+                <a class="btn btn-primary btn-lg" asp-controller="Issue" asp-action="Edit" asp-route-id="@Model.ID">Edit</a>
+                @if (User.HasClaim("Role", "Manager") || User.HasClaim("Role", "Admin"))
+                {
+                <a class="btn btn-danger btn-lg" asp-controller="Issue" asp-action="Delete" asp-route-id="@Model.ID">Delete</a>
+                }
+            </div>
+
+        </div>
+        <hr />
+        <div class="form-group">
+            <label for="UserName">Assigned User</label>
+            <input disabled type="text" class="form-control" id="UserName" value="@Model.AssignedUser.UserName">
+        </div>
+        <div class="form-group">
+            <label for="Summary">Summary</label>
+            <input disabled type="text" class="form-control" id="Summary" name="Summary" value="@Model.Summary">
+
+        </div>
+        <div class="form-group">
+            <label for="CreationDate">Creation Date</label>
+            <input disabled type="date" name="StartDate" max="3000-12-31"
+                   min="1000-01-01" class="form-control" value="@creationDate">
+        </div>
+        <div class="form-group">
+            <label for="RequestedCloseDate">Due Date</label>
+            <input disabled type="date" name="RequestedCloseDate" max="3000-12-31"
+                   min="1000-01-01" class="form-control" value="@dueDate">
+        </div>
+
+
+        <div class="form-group">
+            <label for="State">State</label>
+            <input disabled type="text" class="form-control" id="State" value="@Model.State.Name">
+        </div>
+
+        <div class="form-group">
+            <label for="EstimatedEffort">Estimated Effort(h)</label>
+            <input disabled type="text" class="form-control" id="EstimatedEffort" name="EstimatedEffort" value="@Model.EstimatedEffort">
+        </div>
+
+        <div class="form-group">
+            <label for="Project">Project</label>
+            <input disabled type="text" class="form-control" id="Project" value="@Model.Project.ProjectName">
+        </div>
+        <div class="form-group">
+            <label for="Priority">Priority</label>
+            <input disabled type="text" class="form-control" id="Priority" value="@Model.Priority.Name">
+        </div>
+
+    </div>
+</div>
+

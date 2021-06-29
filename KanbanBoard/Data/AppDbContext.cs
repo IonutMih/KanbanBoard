@@ -24,6 +24,7 @@ namespace KanbanBoard.Data
         public virtual DbSet<UserSkill> UserSkills { get; set; }
         public virtual DbSet<Skill> Skills { get; set; }
         public virtual DbSet<UserDetails> UserDetalis { get; set; }
+        public virtual DbSet<RegisterCode> RegisterEmails { get; set; }
 
 
     }

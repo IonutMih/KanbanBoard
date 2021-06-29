@@ -1,16 +1,19 @@
 ﻿using KanbanBoard.Data;
 using KanbanBoard.Models;
 using KanbanBoard.Models.DataBase;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace KanbanBoard.Controllers
 {
+    [Authorize]
     public class ProfileController : Controller
     {
         private readonly AppDbContext _context;
@@ -26,7 +29,7 @@ namespace KanbanBoard.Controllers
         {
             return RedirectToAction("MyProfile");
         }
-
+        [HttpPost]
         public async Task<IActionResult> AddSkill(string SkillAdded)
         {
             var user = _userManager.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
@@ -45,6 +48,7 @@ namespace KanbanBoard.Controllers
             }
             return RedirectToAction("MyProfile");
         }
+        [HttpPost]
         public async Task<IActionResult> RemoveSkill(string SkillName)
         {
             var user = _userManager.Users.FirstOrDefault(user => user.UserName == User.Identity.Name);
@@ -117,6 +121,51 @@ namespace KanbanBoard.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [Authorize(Policy = "ManagerAccess")]
+        public async Task<IActionResult> DeleteSkill(string SkillName)
+        {
+            var skill = _context.Skills.FirstOrDefault(s => s.SkillName == SkillName);
+            if(skill!=null)
+            {
+                _context.Skills.Remove(skill);
+                await _context.SaveChangesAsync();
+                TempData["DeletedWithSuccess"] = "The skill was deleted succesfully";
+            }
+            return RedirectToAction("ManageSkills");
+        }
+
+        [HttpPost]
+        [Authorize(Policy = "ManagerAccess")]
+        public async Task<IActionResult> AddNewSkill(string SkillName)
+        {
+            if (SkillName == null || SkillName == "" || _context.Skills.Any(s => s.SkillName == SkillName))
+            {
+                TempData["ErrorAddSkill"] = "The name is not valid or the skill already exists.";
+            }
+            else
+            {
+                Skill newSkill = new Skill()
+                {
+                    SkillName = SkillName
+                };
+
+                _context.Skills.Add(newSkill);
+                await _context.SaveChangesAsync();
+                TempData["AddedWithSuccess"] = "The new skill was added succesfully";
+            }
+            return RedirectToAction("ManageSkills");
+        }
+        [HttpGet]
+        [Authorize(Policy = "ManagerAccess")]
+        public IActionResult ManageSkills()
+        {
+            List<Skill> skills = new List<Skill>();
+            skills = _context.Skills.ToList();
+            return View(skills);
+        }
+
         [HttpPost]
         public async Task<IActionResult> EditProfile(string Name,string PhoneNumber,string Address,string Description)
         {
@@ -200,6 +249,7 @@ namespace KanbanBoard.Controllers
             return View(model);
         }
 
+        [HttpGet]
         [Route("Profile/Details/{username?}")]
         public async Task<IActionResult> Details(string username)
         {
@@ -207,6 +257,8 @@ namespace KanbanBoard.Controllers
             ProfileModel model = new ProfileModel();
 
             var user = _userManager.Users.FirstOrDefault(u => u.UserName == username);
+            var roles = await _userManager.GetClaimsAsync(user);
+            model.userRole = roles.First().Value;
 
             model.user = user;
             model.skills = await _context.UserSkills
@@ -226,5 +278,19 @@ namespace KanbanBoard.Controllers
 
             return View(model);
         }
+
+        [HttpPost]
+        [Authorize(Policy = "AdminAccess")]
+        public async Task<IActionResult> ChangeRole(string username, string RoleName,string claim)
+        {
+            var user = _userManager.Users.FirstOrDefault(U => U.UserName == username);
+
+            var oldClaim = new Claim("Role", claim);
+            var newClaim = new Claim("Role", RoleName);
+            await _userManager.ReplaceClaimAsync(user, oldClaim, newClaim);
+
+            return RedirectToAction("Details", new { username = username });
+        }
+
     }
 }

@@ -12,9 +12,6 @@
             dropOnEmpty: true,
             update: function (event, ui) {
                 if (this === ui.item.parent()[0]) {
-                    //TODO: BE ABLE TO CHANGE ORDER OF THE ISSUES IN THE SAME STATE. USE THE EXEMPLE BELOW
-                    //($(this).sortable('serialize'));
-
                         $.ajax({
                             data: { 'item': ui.item.attr('id'), 'to' : ui.item.parent()[0].id },
                             type: 'POST',
@@ -30,7 +27,7 @@
 <div class="row">
     <div class="col-md-4 col-lg-3 col-xl-2 text-center">
         <a class="btn btn-primary btn-lg mb-0 col-sm-12" asp-controller="Issue" asp-action="Create">Create new issue</a>
-        @if (User.HasClaim(c=>c.Type=="Role"&&c.Value=="Manager"))
+        @if (User.HasClaim(c=>c.Type=="Role"&&c.Value=="Manager") || User.HasClaim("Role", "Admin"))
         {
         <a class="btn btn-primary btn-lg mt-4 mb-0 col-sm-12" asp-controller="Projects" asp-action="Create">Create new project</a>        
         }
@@ -105,7 +102,7 @@
                         <div class="card-header">
                             <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                             <a>ID: @issue.ID</a>
-                            <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                            <a asp-controller="Issue" asp-action="Details" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                         </div>
                         <div class="card-body text-dark">
                             @*<h5 class="card-title">Dark card title</h5>*@
@@ -118,7 +115,7 @@
                         <div>
                             <a class="float-right btn btn-info btn-sm" asp-controller="DashBoard" asp-action="MoveIssueToBoard" asp-route-id="@issue.ID">Open</a>
                         </div>
-                            <div class="float-left">@issue.AssignedUser.UserName</div>
+                            <div class="float-left"><a asp-controller="Profile" asp-action="Details" asp-route-username="@issue.AssignedUser.UserName">@issue.AssignedUser.UserName</a></div>
                         </div>
                     </div>
                     }
@@ -152,17 +149,16 @@
                                     <div class="card-header">
                                         <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                         <a>ID: @issue.ID</a>
-                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                                        <a asp-controller="Issue" asp-action="Details" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
                                     <div class="card-body text-dark">
-                                        @*<h5 class="card-title">Dark card title</h5>*@
                                         <div class="card-text"><small>@issue.Summary</small></div>
                                     </div>
                                     <div class="card-header">
                                         <div class="float-right">
                                             <i class="far fa-clock"></i> @issue.EstimatedEffort h
                                         </div>
-                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                        <div class="float-left"><a asp-controller="Profile" asp-action="Details" asp-route-username="@issue.AssignedUser.UserName">@issue.AssignedUser.UserName</a></div>
                                     </div>
                                 </div>
                                 }
@@ -184,17 +180,16 @@
                                     <div class="card-header">
                                         <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                         <a>ID: @issue.ID</a>
-                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                                        <a asp-controller="Issue" asp-action="Details" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
                                     <div class="card-body text-dark">
-                                        @*<h5 class="card-title">Dark card title</h5>*@
                                         <div class="card-text"><small>@issue.Summary</small></div>
                                     </div>
                                     <div class="card-header">
                                         <div class="float-right">
                                             <i class="far fa-clock"></i> @issue.EstimatedEffort h
                                         </div>
-                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                        <div class="float-left"><a asp-controller="Profile" asp-action="Details" asp-route-username="@issue.AssignedUser.UserName">@issue.AssignedUser.UserName</a></div>
                                     </div>
                                 </div>
                                 }
@@ -216,17 +211,16 @@
                                     <div class="card-header">
                                         <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                         <a>ID: @issue.ID</a>
-                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                                        <a asp-controller="Issue" asp-action="Details" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
                                     <div class="card-body text-dark">
-                                        @*<h5 class="card-title">Dark card title</h5>*@
                                         <div class="card-text"><small>@issue.Summary</small></div>
                                     </div>
                                     <div class="card-header">
                                         <div class="float-right">
                                             <i class="far fa-clock"></i> @issue.EstimatedEffort h
                                         </div>
-                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                        <div class="float-left"><a asp-controller="Profile" asp-action="Details" asp-route-username="@issue.AssignedUser.UserName">@issue.AssignedUser.UserName</a></div>
                                     </div>
                                 </div>
                                 }
@@ -248,17 +242,16 @@
                                     <div class="card-header">
                                         <i class="fas fa-exclamation-circle priority-@issue.Priority.Name.ToLower()"></i>
                                         <a>ID: @issue.ID</a>
-                                        <a asp-controller="Issue" asp-action="Edit" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
+                                        <a asp-controller="Issue" asp-action="Details" asp-route-id="@issue.ID"> <i class="fas fa-edit float-right"></i></a>
                                     </div>
                                     <div class="card-body text-dark">
-                                        @*<h5 class="card-title">Dark card title</h5>*@
                                         <div class="card-text"><small>@issue.Summary</small></div>
                                     </div>
                                     <div class="card-header">
                                         <div class="float-right">
                                             <i class="far fa-clock"></i> @issue.EstimatedEffort h
                                         </div>
-                                        <div class="float-left">@issue.AssignedUser.UserName</div>
+                                        <div class="float-left"><a asp-controller="Profile" asp-action="Details" asp-route-username="@issue.AssignedUser.UserName">@issue.AssignedUser.UserName</a></div>
                                     </div>
                                 </div>
                                 }

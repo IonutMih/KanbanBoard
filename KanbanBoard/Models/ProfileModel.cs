@@ -10,6 +10,7 @@ namespace KanbanBoard.Models
     public class ProfileModel
     {
         public IdentityUser user { get; set; }
+        public string userRole { get; set; }
         public List<UserSkill> skills { get; set; }
         public List<Skill> allSkils { get; set; }
         public UserDetails details { get; set; }

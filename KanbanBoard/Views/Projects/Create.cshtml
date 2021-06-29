@@ -4,15 +4,41 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create Project</h1>
+
 <div class="row">
-    <div class="col-md-6">
+    <div class="col-md-4"></div>
+    <div class="col-md-4">
+        <h1 class="text-center">Create Project</h1>
+        @if (TempData["SuccesfullyCreated"] != null)
+        {
+            <div class="alert alert-success" role="alert">
+                @TempData["SuccesfullyCreated"]
+            </div>
+        }
+        else
+        {
+            @if (TempData["ProjectExists"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["ProjectExists"]
+                </div>
+            }
+            @if (TempData["InvalidName"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @TempData["InvalidName"]
+                </div>
+            }
+        }
+
         <form asp-controller="Projects" asp-action="Create" method="post">
             <div class="form-group">
                 <label for="ProjectName">Project Name</label>
                 <input type="text" class="form-control" id="ProjectName" name="ProjectName">
             </div>
-            <button type="submit" class="btn btn-primary mb-2">Create</button>
+            <div class="text-center">
+                <button type="submit" class="btn btn-primary mb-2">Create</button>
+            </div>
         </form>
     </div>
 </div>
