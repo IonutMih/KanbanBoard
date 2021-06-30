@@ -236,7 +236,7 @@
                                 </div>
                             </div>
                             <div id="@(project.ProjectName+"-Closed")" class="full-width-height">
-                                @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Done"))
+                                @foreach (var issue in project.Tasks.Where(i => i.State.Name == "Closed"))
                                     {
                                 <div id="@(project.ProjectName+"-"+issue.ID)" class="card cardother border-dark">
                                     <div class="card-header">

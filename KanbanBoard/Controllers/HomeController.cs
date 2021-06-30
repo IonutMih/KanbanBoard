@@ -34,7 +34,7 @@ namespace KanbanBoard.Controllers
         [Authorize]
         public IActionResult Index()
         {
-            return View();
+            return RedirectToAction("Index","Dashboard");
         }
 
         [Authorize(Policy = "ManagerAccess")]

@@ -57,7 +57,10 @@ namespace KanbanBoard.Models
 
             foreach (string pr in projectNameList)
             {
-                this.allProjects.Add(new ProjectFilterModel(pr));
+                if (!this.allProjects.Any(p => p.projectName == pr))
+                {
+                    this.allProjects.Add(new ProjectFilterModel(pr));
+                }
             }
 
             this.userNames = _userManager.Users.Select(u => u.UserName).ToList();
@@ -84,10 +87,9 @@ namespace KanbanBoard.Models
 
                 foreach (string pr in projectNameList)
                 {
-                    this.allProjects.Add(new ProjectFilterModel(pr));
                     if (this.projects.Any(p => p.ProjectName == pr))
                     {
-                        this.allProjects.Last().isChecked = true;
+                        this.allProjects.FirstOrDefault(p => p.projectName == pr).isChecked = true;
                     }
                 }
             }
@@ -97,12 +99,15 @@ namespace KanbanBoard.Models
         {
             if (this.filter.priorityFilter.Count != 0)
             {
-                foreach (string project in this.filter.projectFilter)
+                foreach (var project in this.allProjects)
                 {
-                    this.projects.FirstOrDefault(p => p.ProjectName == project).Tasks = this.projects.FirstOrDefault(p => p.ProjectName == project)
-                                                                                            .Tasks.Where(i => this.filter.priorityFilter
-                                                                                            .Contains(i.Priority.Name))
-                                                                                            .ToList();
+                    if (this.filter.projectFilter.Contains(project.projectName))
+                    {
+                        this.projects.FirstOrDefault(p => p.ProjectName == project.projectName).Tasks = this.projects.FirstOrDefault(p => p.ProjectName == project.projectName)
+                                                                                                .Tasks.Where(i => this.filter.priorityFilter
+                                                                                                .Contains(i.Priority.Name))
+                                                                                                .ToList();
+                    }
                 }
 
             }

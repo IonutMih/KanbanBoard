@@ -196,7 +196,7 @@ namespace KanbanBoard.Controllers
         }
 
 
-        public async Task<IActionResult> ChangePassword()
+        public IActionResult ChangePassword()
         {
             
             return View();

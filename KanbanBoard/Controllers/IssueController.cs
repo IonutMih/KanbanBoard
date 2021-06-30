@@ -137,11 +137,10 @@ namespace KanbanBoard.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View("Index");
+            return RedirectToAction("Index", "Dashboard");
         }
 
         [HttpGet]
-        [Authorize(Policy = "ManagerAccess")]
         public IActionResult Edit(int ?id)
         {
             if (id == null)
